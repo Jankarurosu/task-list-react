@@ -1,52 +1,125 @@
-export const Task = ({ item }) => {
+import { useState } from "react"
+
+export const Task = ({ item, onUpdate }) => {
+
+    const [edit, setEdit] = useState(false);
+
+    function TaskEdit() {
+
+        const [newName, setNewName] = useState(item.taskName);
+        const [newDetail, setNewDetail] = useState(item.taskDetail);
 
 
+        function handleSubmitUpdate(e) {
+            e.preventDefault();
+        };
+
+        function handleChangeUpdateName(e) {
+            const updateName = e.target.value;
+
+            setNewName(updateName);
+        };
+
+        function handleChangeUpdateDetail(e) {
+            const updateDetail = e.target.value;
+
+            setNewDetail(updateDetail);
+        };
+
+        function handleClickUpdate() {
+            onUpdate(item.id, newName, newDetail);
+
+            setEdit(false);
+        }
+
+        function handleClickNoUpdate() {
+            setEdit(false);
+        }
+
+        return (
+            <form onSubmit={handleSubmitUpdate}>
+                <div className="relative flex w-auto flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
+                    <div className="p-6">
+                        <input className="mb-2 block font-sans text-xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased"
+                            type="text"
+                            placeholder="Actualizar titulo"
+                            onChange={handleChangeUpdateName}
+                            value={newName}
+                        />
+                        <input className="block font-sans text-base font-light leading-relaxed text-inherit antialiased"
+                            type="text"
+                            placeholder="Actualizar detalle"
+                            onChange={handleChangeUpdateDetail}
+                            value={newDetail}
+                        />
+                    </div>
+                    <div className="p-6 pt-0 flex">
+                        <button
+                            className="select-none rounded-lg bg-green-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
+                            type="button"
+                            data-ripple-light="true"
+                            onClick={handleClickUpdate}
+                        >
+                            Actualizar
+                        </button>
+
+                        <button
+                            className="select-none rounded-lg bg-red-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-red-500/20 transition-all hover:shadow-lg hover:shadow-red-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                            type="button"
+                            data-ripple-light="true"
+                            onClick={handleClickNoUpdate}
+                        >
+                            No actualizar
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+        );
+    };
+
+    function TaskElement() {
+        return (
+            <div className="relative flex w-auto flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
+                <div className="p-6">
+                    <h5 className="mb-2 block font-sans text-xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
+                        {item.taskName}
+                    </h5>
+                    <p className="block font-sans text-base font-light leading-relaxed text-inherit antialiased">
+                        {item.taskDetail}
+                    </p>
+                </div>
+                <div className="p-6 pt-0 flex">
+                    <button
+                        className="select-none rounded-lg bg-pink-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none mr-2"
+                        type="button"
+                        data-ripple-light="true"
+                        onClick={() => setEdit(true)}
+                    >
+                        Editar
+                    </button>
+
+                    <button
+                        className="select-none rounded-lg bg-red-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-red-500/20 transition-all hover:shadow-lg hover:shadow-red-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                        type="button"
+                        data-ripple-light="true"
+                    >
+                        Eliminar
+                    </button>
+                </div>
+
+            </div>
+        );
+    };
 
     return (
-        <div className="mx-auto container ">
-            <div class="flex flex-nowrap justify-center">
-                <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 mb-4">
-                    <div className="rounded">
-                        <div className="w-full h-64 flex flex-col justify-between dark:bg-gray-800 bg-white dark:border-gray-700 rounded-lg border border-gray-400 mb-6 py-5 px-4">
-                            <div>
-                                <h3 className="text-gray-800 dark:text-gray-100 leading-7 font-semibold w-11/12">What does success as a UX designer look like and how to get there systematically</h3>
-                            </div>
-                            <div>
-                                <div className="mb-3 flex items-center">
-                                    <div className="border border-gray-300 dark:border-gray-700 rounded-full px-3 py-1 dark:text-gray-400 text-gray-600 text-xs flex items-center" aria-label="due on" role="contentinfo">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-alarm" width="16" height="16" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z"></path>
-                                            <circle cx="12" cy="13" r="7"></circle>
-                                            <polyline points="12 10 12 13 14 13"></polyline>
-                                            <line x1="7" y1="4" x2="4.25" y2="6"></line>
-                                            <line x1="17" y1="4" x2="19.75" y2="6"></line>
-                                        </svg>
-                                        <p className="ml-2 dark:text-gray-400">7 Sept, 23:00</p>
-                                    </div>
-                                    <button className="p-1 bg-gray-800 dark:bg-gray-100 rounded-full ml-2 text-yellow-500 focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-black" aria-label="save in starred items" role="button">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-star" width="16" height="16" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z"></path>
-                                            <path d="M12 17.75l-6.172 3.245 1.179-6.873-4.993-4.867 6.9-1.002L12 2l3.086 6.253 6.9 1.002-4.993 4.867 1.179 6.873z"></path>
-                                        </svg>
-                                    </button>
-                                </div>
-                                <div className="flex items-center justify-between text-gray-800">
-                                    <p className="dark:text-gray-100 text-sm">March 28, 2020</p>
-                                    <button className="w-8 h-8 rounded-full dark:bg-gray-100 dark:text-gray-800 bg-gray-800 text-white flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-black" aria-label="edit note" role="button">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-pencil" width="20" height="20" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z"></path>
-                                            <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4"></path>
-                                            <line x1="13.5" y1="6.5" x2="17.5" y2="10.5"></line>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    )
-}
+        <>
+            {
+                edit ? <TaskEdit /> : <TaskElement />
+            }
+        </>
+
+    );
+};
 
 

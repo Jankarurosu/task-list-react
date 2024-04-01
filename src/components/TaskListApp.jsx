@@ -3,13 +3,26 @@ import { Task } from "./Task";
 
 export const TaskListApp = () => {
 
-    const [taskName, setTaskName] = useState("Oh no hermano");
+    const [taskName, setTaskName] = useState("");
+    const [taskDetail, setTaskDetail] = useState("");
     const [task, setTask] = useState([]);
 
-    function handleChange(e) {
-        const value = e.target.value;
+    function clean() {
+        setTaskName("");
+        setTaskDetail("");
+    }
 
-        setTaskName(value);
+    function handleChangeName(e) {
+        const valueName = e.target.value;
+
+        setTaskName(valueName);
+
+    };
+
+    function handleChangeDetail(e) {
+        const valueDetail = e.target.value;
+
+        setTaskDetail(valueDetail);
     };
 
     function handleSubmit(e) {
@@ -18,6 +31,7 @@ export const TaskListApp = () => {
         const newTask = {
             id: crypto.randomUUID(),
             taskName: taskName,
+            taskDetail: taskDetail,
             completed: false
         };
 
@@ -25,40 +39,78 @@ export const TaskListApp = () => {
         temp.unshift(newTask);
 
         setTask(temp);
+        clean()
     };
+
+    function handleUpdate(id, updateName, updateDetail) {
+        const temp = [...task];
+        const item = temp.find((item) => item.id === id);
+        item.taskName = updateName;
+        item.taskDetail = updateDetail;
+
+        setTask(temp);
+    }
 
     return (
         <>
-            <form className="taskListForm" onSubmit={handleSubmit}>
-                <div className="relative flex h-10 w-full min-w-[200px] max-w-[24rem]">
-                    <input
-                        className="!absolute right-1 top-1 z-10 select-none rounded bg-pink-500 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none peer-placeholder-shown:pointer-events-none peer-placeholder-shown:bg-blue-gray-500 peer-placeholder-shown:opacity-50 peer-placeholder-shown:shadow-none"
-                        type="submit"
-                        data-ripple-light="true"
-                        value="Agregar"
-                        onClick={handleSubmit}
-                    >
-                    </input>
-                    <input
-                        type="text"
-                        className="peer h-full w-full rounded-[7px] border border-blue-gray-200 bg-transparent px-3 py-2.5 pr-20 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-pink-500 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
-                        placeholder=" "
-                        value={taskName}
-                        onChange={handleChange}
-                        required
-                    />
-                    <label className="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-blue-gray-400 transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-blue-gray-200 before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-blue-gray-200 after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-blue-gray-500 peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-pink-500 peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:!border-pink-500 peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:!border-pink-500 peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
-                        Tarea
-                    </label>
-                </div>
-            </form>
+            <div className="flex items-center justify-center p-12">
+                <div className="mx-auto w-full max-w-[1250px]">
+                    <form onSubmit={handleSubmit}>
+                        <div className="mb-5">
+                            <label
+                                for="title"
+                                className="mb-3 block text-base font-medium text-[#07074D]"
+                            >
+                                Titulo de la tarea
+                            </label>
+                            <input
+                                type="text"
+                                name="title"
+                                id="title"
+                                placeholder="Hacer las tareas del hogar"
+                                value={taskName}
+                                onChange={handleChangeName}
+                                className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                            />
+                        </div>
+                        <div className="mb-5">
+                            <label
+                                for="description"
+                                className="mb-3 block text-base font-medium text-[#07074D]"
+                            >
+                                Detalle de la tarea
+                            </label>
+                            <textarea
+                                rows="4"
+                                name="description"
+                                id="description"
+                                placeholder="Lavar la ropa y hacer la cena"
+                                value={taskDetail}
+                                onChange={handleChangeDetail}
+                                className="w-full resize-none rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                            ></textarea >
+                        </div>
+                        <div>
+                            <input
+                                className="select-none rounded-lg bg-pink-500 py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                                type="submit"
+                                data-ripple-light="true"
+                                value="Agregar"
+                                onClick={handleSubmit}
+                            >
+                            </input>
+                        </div>
+                    </form>
 
-            <div className="taskContainer">
-                {
-                    task.map((item) => (
-                        <Task key={item.id} item={item} />
-                    ))
-                }
+                    <div className="grid justify-center md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-7 my-10">
+                        {
+                            task.map((item) => (
+                                <Task key={item.id} item={item} onUpdate={handleUpdate} />
+                            ))
+                        }
+                    </div>
+
+                </div>
             </div>
         </>
     );
