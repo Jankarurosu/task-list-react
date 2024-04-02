@@ -49,11 +49,23 @@ export const TaskListApp = () => {
         item.taskDetail = updateDetail;
 
         setTask(temp);
-    }
+    };
+
+    function handleDelete(id) {
+        const temp = task.filter((item) => item.id !== id);
+
+        setTask(temp);
+    };
 
     return (
         <>
-            <div className="flex items-center justify-center p-12">
+            <div class="py-5 text-center">
+                <h1 class="text-4xl font-bold">¡Organiza tu día con la App de Tareas!</h1>
+                <p class="text-lg mt-2">Desarrollado por Jankarurosu</p>
+            </div>
+
+
+            <div className="flex items-center justify-center p-5">
                 <div className="mx-auto w-full max-w-[1250px]">
                     <form onSubmit={handleSubmit}>
                         <div className="mb-5">
@@ -105,7 +117,9 @@ export const TaskListApp = () => {
                     <div className="grid justify-center md:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-7 my-10">
                         {
                             task.map((item) => (
-                                <Task key={item.id} item={item} onUpdate={handleUpdate} />
+                                <Task key={item.id} item={item} onUpdate={handleUpdate}
+                                    onDelete={handleDelete}
+                                />
                             ))
                         }
                     </div>
